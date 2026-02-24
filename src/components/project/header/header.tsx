@@ -11,7 +11,7 @@ export default function Header() {
           <div className="p-3 aspect-square rounded-xl bg-blue-600">
             <Icons.Grid color="white" fontWeight={"64"} />
           </div>
-          <div className="flex flex-col items-start justify-between">
+          <div className="flex flex-col items-start justify-between font-mono">
             <h4 className="font-bold text-lg text-primary">KANBAN BOARD</h4>
             <span className="text-muted-foreground text-sm font-medium">
               14 Tasks
