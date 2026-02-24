@@ -8,7 +8,7 @@ export default function Header() {
       <div className="flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <div className="p-3 aspect-square rounded-xl bg-primary">
+          <div className="p-3 aspect-square rounded-xl bg-blue-600">
             <Icons.Grid color="white" fontWeight={"64"} />
           </div>
           <div className="flex flex-col items-start justify-between">
