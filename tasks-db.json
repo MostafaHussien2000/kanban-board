@@ -1,0 +1,74 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Setup React + TypeScript project",
+      "description": "Initialize project using Vite with React and TypeScript template and configure folder structure.",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": 2,
+      "title": "Configure TailwindCSS",
+      "description": "Install and configure TailwindCSS with PostCSS and ensure styles are properly applied.",
+      "status": "in-progress",
+      "priority": "high"
+    },
+    {
+      "id": 3,
+      "title": "Create reusable Button component",
+      "description": "Build a reusable button component with variants for primary, secondary, and danger states.",
+      "status": "review",
+      "priority": "medium"
+    },
+    {
+      "id": 4,
+      "title": "Implement authentication UI",
+      "description": "Create login and register pages with proper form validation and error handling.",
+      "status": "backlog",
+      "priority": "high"
+    },
+    {
+      "id": 5,
+      "title": "Setup routing",
+      "description": "Configure React Router and protect private routes for authenticated users.",
+      "status": "in-progress",
+      "priority": "medium"
+    },
+    {
+      "id": 6,
+      "title": "Create task board layout",
+      "description": "Design Kanban board layout with columns for backlog, in-progress, review, and done.",
+      "status": "backlog",
+      "priority": "medium"
+    },
+    {
+      "id": 7,
+      "title": "Implement drag and drop",
+      "description": "Enable drag-and-drop functionality between task columns.",
+      "status": "backlog",
+      "priority": "high"
+    },
+    {
+      "id": 8,
+      "title": "Connect to backend API",
+      "description": "Integrate frontend with backend REST API using Axios and handle loading states.",
+      "status": "review",
+      "priority": "high"
+    },
+    {
+      "id": 9,
+      "title": "Write unit tests",
+      "description": "Add unit tests for components using Jest and React Testing Library.",
+      "status": "backlog",
+      "priority": "low"
+    },
+    {
+      "id": 10,
+      "title": "Optimize performance",
+      "description": "Improve rendering performance using memoization and code splitting.",
+      "status": "backlog",
+      "priority": "low"
+    }
+  ]
+}
