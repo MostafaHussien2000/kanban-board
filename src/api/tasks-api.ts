@@ -24,7 +24,7 @@ export const getTasks = () => API.get<Task[]>("/tasks");
  * const task = await getTaskById("1");
  * ```
  */
-export const getTaskById = (id: string) => API.get<Task>(`/tasks/${id}`);
+export const getTaskById = (id: Pick<Task, "id">) => API.get<Task>(`/tasks/${id}`);
 
 /**
  * Create task
@@ -50,7 +50,7 @@ export const createTask = (task: Omit<Task, "id">) =>
  * @returns Promise<Task>
  * @example
  * ```typescript
- * const task = await updateTask(1, {
+ * const task = await updateTask({id: "1"}, {
  *   title: "Task 1",
  *   description: "Description 1",
  *   status: "backlog",
@@ -58,7 +58,7 @@ export const createTask = (task: Omit<Task, "id">) =>
  * });
  * ```
  */
-export const updateTask = (id: string, task: Omit<Task, "id">) =>
+export const updateTask = (id: Task["id"], task: Omit<Task, "id">) =>
   API.put<Task>(`/tasks/${id}`, task);
 
 /**
