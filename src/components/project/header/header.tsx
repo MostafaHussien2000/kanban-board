@@ -1,8 +1,23 @@
 import { Icons } from "@/components/ui/icon";
 import { Input } from "@/components/ui/input";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import { useRef, useEffect } from "react";
 
 export default function Header() {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <header className="py-3 px-10 border-b border-border sticky top-0 z-10 bg-background/80 backdrop-blur-sm">
       <div className="flex justify-between items-center">
@@ -23,6 +38,7 @@ export default function Header() {
         <div className="relative bg-input border-muted-foreground rounded-md overflow-hidden flex items-center px-2">
           <Icons.Search className="text-muted-foreground" />
           <Input
+            ref={inputRef}
             placeholder="Search tasks ..."
             className="bg-transparent border-none focus-visible:ring-0"
           />
