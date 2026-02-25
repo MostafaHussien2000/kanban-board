@@ -13,7 +13,7 @@ interface KanbanColumnProps {
   statusKey: TaskStatus;
   tasks: Task[];
   isLoading?: boolean;
-  showForm: () => void;
+  showForm: (status: TaskStatus) => void;
 }
 
 export default function KanbanColumn({
@@ -72,7 +72,7 @@ export default function KanbanColumn({
         <div className="mt-auto">
           <button
             className="w-full border-2 border-dotted p-3 hover:bg-gray-200 rounded-lg cursor-pointer font-mono text-sm flex items-center justify-center gap-3"
-            onClick={showForm}
+            onClick={() => showForm(statusKey)}
           >
             <Icons.Plus /> Add task
           </button>

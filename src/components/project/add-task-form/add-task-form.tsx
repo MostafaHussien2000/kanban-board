@@ -30,16 +30,23 @@ import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import DifficultyRadioGroup from "./difficulty-radio-group";
 import { useTasks } from "@/hooks/useTasks";
-import type { Task } from "@/types/task";
+import type { Task, TaskStatus } from "@/types/task";
 
 interface AddTaskFormProps {
   visible: boolean;
   close: () => void;
+  defaultStatus?: TaskStatus;
 }
 
-export default function AddTaskForm({ close }: AddTaskFormProps) {
+export default function AddTaskForm({
+  close,
+  defaultStatus,
+}: AddTaskFormProps) {
   const form = useForm<TaskSchema>({
-    defaultValues: newTaskDefaultValues,
+    defaultValues: {
+      ...newTaskDefaultValues,
+      status: defaultStatus ?? newTaskDefaultValues.status,
+    },
     resolver: zodResolver(taskSchema),
   });
 
@@ -66,6 +73,15 @@ export default function AddTaskForm({ close }: AddTaskFormProps) {
       },
     );
   });
+
+  useEffect(() => {
+    if (defaultStatus) {
+      form.reset({
+        ...newTaskDefaultValues,
+        status: defaultStatus,
+      });
+    }
+  }, [defaultStatus, form]);
 
   useEffect(() => {
     document.body.style.overflowY = "hidden";

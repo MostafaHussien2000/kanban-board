@@ -24,8 +24,8 @@ import type { Task } from "@/types/task";
 export default function KanbanBoard() {
   const { data, isLoading, isError, updateMutation } = useTasks();
 
-  const [addNewTaskFormTogge, setAddNewTaskFormToggle] =
-    useState<boolean>(false);
+  const [addNewTaskFormStatus, setAddNewTaskFormStatus] =
+    useState<TaskStatus | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [localTasks, setLocalTasks] = useState<Task[]>([]);
 
@@ -166,7 +166,7 @@ export default function KanbanBoard() {
                 statusKey={statusKey}
                 tasks={tasks.filter((task: Task) => task.status === statusKey)}
                 isLoading={isLoading}
-                showForm={() => setAddNewTaskFormToggle(true)}
+                showForm={(status) => setAddNewTaskFormStatus(status)}
               />
             ))}
           </div>
@@ -187,10 +187,11 @@ export default function KanbanBoard() {
           </DragOverlay>
         </DndContext>
       </ScrollArea>
-      {addNewTaskFormTogge ? (
+      {addNewTaskFormStatus ? (
         <AddTaskForm
-          visible={addNewTaskFormTogge}
-          close={() => setAddNewTaskFormToggle(false)}
+          defaultStatus={addNewTaskFormStatus}
+          visible={!!addNewTaskFormStatus}
+          close={() => setAddNewTaskFormStatus(null)}
         />
       ) : (
         <></>
