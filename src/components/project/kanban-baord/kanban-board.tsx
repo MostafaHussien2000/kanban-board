@@ -6,6 +6,7 @@ import { useTasks } from "@/hooks/useTasks";
 import AddTaskForm from "../add-task-form/add-task-form";
 import { arrayMove } from "@dnd-kit/sortable";
 import { useState, useMemo } from "react";
+import TaskDetailsModal from "../task-details-modal/task-details-modal";
 import {
   DndContext,
   PointerSensor,
@@ -28,6 +29,7 @@ export default function KanbanBoard() {
     useState<TaskStatus | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [localTasks, setLocalTasks] = useState<Task[]>([]);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   const tasks = useMemo(() => {
     if (activeId) return localTasks;
@@ -167,6 +169,7 @@ export default function KanbanBoard() {
                 tasks={tasks.filter((task: Task) => task.status === statusKey)}
                 isLoading={isLoading}
                 showForm={(status) => setAddNewTaskFormStatus(status)}
+                onSelect={(task) => setSelectedTask(task)}
               />
             ))}
           </div>
@@ -193,9 +196,14 @@ export default function KanbanBoard() {
           visible={!!addNewTaskFormStatus}
           close={() => setAddNewTaskFormStatus(null)}
         />
-      ) : (
-        <></>
-      )}
+      ) : null}
+
+      {selectedTask ? (
+        <TaskDetailsModal
+          task={selectedTask}
+          close={() => setSelectedTask(null)}
+        />
+      ) : null}
     </>
   );
 }

@@ -6,9 +6,10 @@ import { CSS } from "@dnd-kit/utilities";
 
 interface TaskCardProps {
   task: Task;
+  onSelect?: (task: Task) => void;
 }
 
-export default function TaskCard({ task }: TaskCardProps) {
+export default function TaskCard({ task, onSelect }: TaskCardProps) {
   const {
     attributes,
     listeners,
@@ -39,7 +40,8 @@ export default function TaskCard({ task }: TaskCardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="bg-card border border-border rounded-lg p-3"
+      className="bg-card border border-border rounded-lg p-3 cursor-pointer active:cursor-grabbing hover:border-primary/50 transition-colors"
+      onClick={() => onSelect?.(task)}
     >
       <h5 className="text-md font-medium text-primary font-mono">
         {task.title}

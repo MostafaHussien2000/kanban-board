@@ -14,6 +14,7 @@ interface KanbanColumnProps {
   tasks: Task[];
   isLoading?: boolean;
   showForm: (status: TaskStatus) => void;
+  onSelect?: (task: Task) => void;
 }
 
 export default function KanbanColumn({
@@ -21,6 +22,7 @@ export default function KanbanColumn({
   tasks,
   isLoading,
   showForm,
+  onSelect,
 }: KanbanColumnProps) {
   const { label, accent } = STATUS_CONFIG[statusKey];
   const { setNodeRef } = useDroppable({
@@ -65,7 +67,7 @@ export default function KanbanColumn({
             strategy={verticalListSortingStrategy}
           >
             {tasks.map((task) => (
-              <TaskCard key={task.id} task={task} />
+              <TaskCard key={task.id} task={task} onSelect={onSelect} />
             ))}
           </SortableContext>
         )}
