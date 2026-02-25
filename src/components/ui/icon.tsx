@@ -4,6 +4,7 @@ import {
   Magnifier,
   Widget,
   TrashBinMinimalistic,
+  PenNewSquare,
 } from "@solar-icons/react-perf/category/style/Broken";
 import type { IconProps } from "@solar-icons/react-perf/lib/types";
 
@@ -13,4 +14,5 @@ export const Icons = {
   Close: (props: IconProps) => <CloseCircle size={20} {...props} />,
   Plus: (props: IconProps) => <AddCircle size={20} {...props} />,
   Trash: (props: IconProps) => <TrashBinMinimalistic size={20} {...props} />,
+  Edit: (props: IconProps) => <PenNewSquare size={20} {...props} />,
 };

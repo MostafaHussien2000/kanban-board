@@ -27,9 +27,10 @@ export default function KanbanBoard() {
 
   const [addNewTaskFormStatus, setAddNewTaskFormStatus] =
     useState<TaskStatus | null>(null);
-  const [activeId, setActiveId] = useState<string | null>(null);
   const [localTasks, setLocalTasks] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [taskToEdit, setTaskToEdit] = useState<Task | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const tasks = useMemo(() => {
     if (activeId) return localTasks;
@@ -143,6 +144,11 @@ export default function KanbanBoard() {
     }
   };
 
+  const handleCloseForm = () => {
+    setAddNewTaskFormStatus(null);
+    setTaskToEdit(null);
+  };
+
   if (isError) {
     return (
       <div className="flex-1 flex items-center justify-center text-destructive font-mono text-sm">
@@ -190,11 +196,12 @@ export default function KanbanBoard() {
           </DragOverlay>
         </DndContext>
       </ScrollArea>
-      {addNewTaskFormStatus ? (
+      {addNewTaskFormStatus || taskToEdit ? (
         <AddTaskForm
-          defaultStatus={addNewTaskFormStatus}
-          visible={!!addNewTaskFormStatus}
-          close={() => setAddNewTaskFormStatus(null)}
+          taskToEdit={taskToEdit || undefined}
+          defaultStatus={addNewTaskFormStatus || undefined}
+          visible={!!(addNewTaskFormStatus || taskToEdit)}
+          close={handleCloseForm}
         />
       ) : null}
 
@@ -202,6 +209,10 @@ export default function KanbanBoard() {
         <TaskDetailsModal
           task={selectedTask}
           close={() => setSelectedTask(null)}
+          onEdit={() => {
+            setTaskToEdit(selectedTask);
+            setSelectedTask(null);
+          }}
         />
       ) : null}
     </>

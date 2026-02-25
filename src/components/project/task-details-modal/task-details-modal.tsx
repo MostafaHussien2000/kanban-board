@@ -11,11 +11,13 @@ import { useEffect } from "react";
 interface TaskDetailsModalProps {
   task: Task;
   close: () => void;
+  onEdit: () => void;
 }
 
 export default function TaskDetailsModal({
   task,
   close,
+  onEdit,
 }: TaskDetailsModalProps) {
   const { deleteMutation } = useTasks();
 
@@ -92,10 +94,18 @@ export default function TaskDetailsModal({
             </p>
           </div>
 
-          <div className="pt-4 border-t border-border mt-2">
+          <div className="pt-4 border-t border-border mt-2 grid grid-cols-2 gap-3">
+            <Button
+              variant="secondary"
+              className="font-mono gap-2 shadow-none"
+              onClick={onEdit}
+            >
+              <Icons.Edit size={18} />
+              EDIT TASK
+            </Button>
             <Button
               variant="destructive"
-              className="w-full font-mono gap-2 text-white"
+              className="font-mono gap-2 text-white shadow-none"
               onClick={handleDelete}
               disabled={deleteMutation.isPending}
             >

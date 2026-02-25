@@ -36,23 +36,48 @@ interface AddTaskFormProps {
   visible: boolean;
   close: () => void;
   defaultStatus?: TaskStatus;
+  taskToEdit?: Task;
 }
 
 export default function AddTaskForm({
   close,
   defaultStatus,
+  taskToEdit,
 }: AddTaskFormProps) {
   const form = useForm<TaskSchema>({
-    defaultValues: {
-      ...newTaskDefaultValues,
-      status: defaultStatus ?? newTaskDefaultValues.status,
-    },
+    defaultValues: taskToEdit
+      ? {
+          title: taskToEdit.title,
+          description: taskToEdit.description,
+          status: taskToEdit.status,
+          priority: taskToEdit.priority,
+        }
+      : {
+          ...newTaskDefaultValues,
+          status: defaultStatus ?? newTaskDefaultValues.status,
+        },
     resolver: zodResolver(taskSchema),
   });
 
-  const { createMutation, data: tasksData } = useTasks();
+  const { createMutation, updateMutation, data: tasksData } = useTasks();
 
   const handleFormSubmission = form.handleSubmit((data) => {
+    if (taskToEdit) {
+      updateMutation.mutate(
+        {
+          ...taskToEdit,
+          ...data,
+        } as Task,
+        {
+          onSuccess: () => {
+            close();
+            form.reset();
+          },
+        },
+      );
+      return;
+    }
+
     const tasks = tasksData?.data ?? [];
     const columnTasks = tasks.filter((t) => t.status === data.status);
     const maxOrder = columnTasks.reduce(
@@ -75,13 +100,20 @@ export default function AddTaskForm({
   });
 
   useEffect(() => {
-    if (defaultStatus) {
+    if (taskToEdit) {
+      form.reset({
+        title: taskToEdit.title,
+        description: taskToEdit.description,
+        status: taskToEdit.status,
+        priority: taskToEdit.priority,
+      });
+    } else if (defaultStatus) {
       form.reset({
         ...newTaskDefaultValues,
         status: defaultStatus,
       });
     }
-  }, [defaultStatus, form]);
+  }, [defaultStatus, taskToEdit, form]);
 
   useEffect(() => {
     document.body.style.overflowY = "hidden";
@@ -102,7 +134,7 @@ export default function AddTaskForm({
         <CardHeader>
           <div className="flex items-start justify-between">
             <CardTitle className="font-mono text-lg font-bold">
-              ADD NEW TASK
+              {taskToEdit ? "EDIT TASK" : "ADD NEW TASK"}
             </CardTitle>
             <button type={"button"} className="cursor-pointer" onClick={close}>
               <Icons.Close size={26} />
@@ -224,12 +256,14 @@ export default function AddTaskForm({
                 />
                 <Button
                   disabled={
-                    form.formState.isSubmitting || createMutation.isPending
+                    form.formState.isSubmitting ||
+                    createMutation.isPending ||
+                    updateMutation.isPending
                   }
                   type="submit"
                   className="font-mono"
                 >
-                  ADD TASK
+                  {taskToEdit ? "UPDATE TASK" : "ADD TASK"}
                 </Button>
               </FieldGroup>
             </form>
