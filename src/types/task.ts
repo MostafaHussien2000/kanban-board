@@ -8,4 +8,5 @@ export interface Task {
   description: string;
   status: import("@/config/statuses.config").TaskStatus;
   priority: import("@/config/priorities.config").TaskPriority;
+  order: number;
 }

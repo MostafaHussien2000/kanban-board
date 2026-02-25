@@ -1,14 +1,46 @@
 import { cn } from "@/lib/utils";
 import { PRIORITY_CONFIG } from "@/config/priorities.config";
 import type { Task, TaskPriority } from "@/types/task";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface TaskCardProps {
   task: Task;
 }
 
 export default function TaskCard({ task }: TaskCardProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: task.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  if (isDragging) {
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        className="bg-card/50 border border-border rounded-lg p-3 opacity-0"
+      />
+    );
+  }
+
   return (
-    <div className="bg-card border border-border rounded-lg p-3">
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="bg-card border border-border rounded-lg p-3"
+    >
       <h5 className="text-md font-medium text-primary font-mono">
         {task.title}
       </h5>

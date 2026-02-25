@@ -3,6 +3,11 @@ import { STATUS_CONFIG } from "@/config/statuses.config";
 import type { Task, TaskStatus } from "@/types/task";
 import TaskCard from "../task-card/task-card";
 import { Icons } from "@/components/ui/icon";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { useDroppable } from "@dnd-kit/core";
 
 interface KanbanColumnProps {
   statusKey: TaskStatus;
@@ -18,9 +23,15 @@ export default function KanbanColumn({
   showForm,
 }: KanbanColumnProps) {
   const { label, accent } = STATUS_CONFIG[statusKey];
+  const { setNodeRef } = useDroppable({
+    id: statusKey,
+  });
 
   return (
-    <section className="flex flex-col gap-2 bg-muted rounded-2xl p-4 w-[350px]">
+    <section
+      ref={setNodeRef}
+      className="flex flex-col gap-2 bg-muted rounded-2xl p-4 w-[350px] min-h-[500px]"
+    >
       <div className="flex items-center gap-3">
         {/* Colored accent dot */}
         <div className={cn("w-3 aspect-square rounded-full", accent)} />
@@ -31,7 +42,7 @@ export default function KanbanColumn({
           {isLoading ? "—" : tasks.length}
         </span>
       </div>
-      <div className="grid gap-2 mt-2">
+      <div className="flex-1 flex flex-col gap-2 mt-2">
         {isLoading ? (
           // Skeleton placeholders while fetching
           Array.from({ length: 2 }).map((_, i) => (
@@ -49,13 +60,18 @@ export default function KanbanColumn({
             No tasks
           </p>
         ) : (
-          tasks.map((task) => <TaskCard key={task.id} task={task} />)
+          <SortableContext
+            items={tasks.map((task) => task.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {tasks.map((task) => (
+              <TaskCard key={task.id} task={task} />
+            ))}
+          </SortableContext>
         )}
-        <div>
+        <div className="mt-auto">
           <button
-            className={
-              "w-full border-2 border-dotted p-3 hover:bg-gray-200 rounded-lg cursor-pointer font-mono text-sm flex items-center justify-center gap-3"
-            }
+            className="w-full border-2 border-dotted p-3 hover:bg-gray-200 rounded-lg cursor-pointer font-mono text-sm flex items-center justify-center gap-3"
             onClick={showForm}
           >
             <Icons.Plus /> Add task

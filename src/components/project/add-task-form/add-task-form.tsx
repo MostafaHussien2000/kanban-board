@@ -43,15 +43,28 @@ export default function AddTaskForm({ close }: AddTaskFormProps) {
     resolver: zodResolver(taskSchema),
   });
 
-  const { createMutation } = useTasks();
+  const { createMutation, data: tasksData } = useTasks();
 
   const handleFormSubmission = form.handleSubmit((data) => {
-    createMutation.mutate(data as Omit<Task, "id">, {
-      onSuccess: () => {
-        close();
-        form.reset();
+    const tasks = tasksData?.data ?? [];
+    const columnTasks = tasks.filter((t) => t.status === data.status);
+    const maxOrder = columnTasks.reduce(
+      (max, t) => (t.order > max ? t.order : max),
+      0,
+    );
+
+    createMutation.mutate(
+      {
+        ...data,
+        order: maxOrder + 1000,
+      } as Omit<Task, "id">,
+      {
+        onSuccess: () => {
+          close();
+          form.reset();
+        },
       },
-    });
+    );
   });
 
   useEffect(() => {
