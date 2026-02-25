@@ -1,53 +1,66 @@
 import { cn } from "@/lib/utils";
 import { STATUS_CONFIG } from "@/config/statuses.config";
-import type { TaskStatus } from "@/types/task";
+import type { Task, TaskStatus } from "@/types/task";
 import TaskCard from "../task-card/task-card";
+import { Icons } from "@/components/ui/icon";
 
 interface KanbanColumnProps {
   statusKey: TaskStatus;
+  tasks: Task[];
+  isLoading?: boolean;
+  showForm: () => void;
 }
 
-export default function KanbanColumn({ statusKey }: KanbanColumnProps) {
+export default function KanbanColumn({
+  statusKey,
+  tasks,
+  isLoading,
+  showForm,
+}: KanbanColumnProps) {
   const { label, accent } = STATUS_CONFIG[statusKey];
 
   return (
-    <section className="flex flex-col gap-2 bg-muted rounded-2xl p-4 min-w-[350px]">
+    <section className="flex flex-col gap-2 bg-muted rounded-2xl p-4 w-[350px]">
       <div className="flex items-center gap-3">
         {/* Colored accent dot */}
         <div className={cn("w-3 aspect-square rounded-full", accent)} />
         <h2 className="text-md font-semibold text-muted-foreground font-mono">
           {label}
         </h2>
-        <span className="text-sm text-muted-foreground">3</span>
+        <span className="text-sm text-muted-foreground">
+          {isLoading ? "—" : tasks.length}
+        </span>
       </div>
       <div className="grid gap-2 mt-2">
-        <TaskCard
-          task={{
-            id: "1",
-            title: "Task 1",
-            description: "Description 1",
-            priority: "high",
-            status: statusKey,
-          }}
-        />
-        <TaskCard
-          task={{
-            id: "2",
-            title: "Task 2",
-            description: "Description 2",
-            priority: "medium",
-            status: statusKey,
-          }}
-        />
-        <TaskCard
-          task={{
-            id: "2",
-            title: "Task 2",
-            description: "Description 2",
-            priority: "low",
-            status: statusKey,
-          }}
-        />
+        {isLoading ? (
+          // Skeleton placeholders while fetching
+          Array.from({ length: 2 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-card border border-border rounded-lg p-3 animate-pulse"
+            >
+              <div className="h-4 bg-muted-foreground/20 rounded w-3/4 mb-2" />
+              <div className="h-3 bg-muted-foreground/10 rounded w-full mb-1" />
+              <div className="h-3 bg-muted-foreground/10 rounded w-2/3" />
+            </div>
+          ))
+        ) : tasks.length === 0 ? (
+          <p className="text-xs text-muted-foreground font-mono text-center py-4">
+            No tasks
+          </p>
+        ) : (
+          tasks.map((task) => <TaskCard key={task.id} task={task} />)
+        )}
+        <div>
+          <button
+            className={
+              "w-full border-2 border-dotted p-3 hover:bg-gray-200 rounded-lg cursor-pointer font-mono text-sm flex items-center justify-center gap-3"
+            }
+            onClick={showForm}
+          >
+            <Icons.Plus /> Add task
+          </button>
+        </div>
       </div>
     </section>
   );

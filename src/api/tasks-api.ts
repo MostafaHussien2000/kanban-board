@@ -21,10 +21,10 @@ export const getTasks = () => API.get<Task[]>("/tasks");
  * @returns Promise<Task>
  * @example
  * ```typescript
- * const task = await getTaskById(1);
+ * const task = await getTaskById("1");
  * ```
  */
-export const getTaskById = (id: number) => API.get<Task>(`/tasks/${id}`);
+export const getTaskById = (id: string) => API.get<Task>(`/tasks/${id}`);
 
 /**
  * Create task
@@ -58,7 +58,7 @@ export const createTask = (task: Omit<Task, "id">) =>
  * });
  * ```
  */
-export const updateTask = (id: number, task: Omit<Task, "id">) =>
+export const updateTask = (id: string, task: Omit<Task, "id">) =>
   API.put<Task>(`/tasks/${id}`, task);
 
 /**
@@ -67,7 +67,7 @@ export const updateTask = (id: number, task: Omit<Task, "id">) =>
  * @returns Promise<void>
  * @example
  * ```typescript
- * await deleteTask(1);
+ * await deleteTask("1");
  * ```
  */
-export const deleteTask = (id: number) => API.delete<void>(`/tasks/${id}`);
+export const deleteTask = (id: string) => API.delete<void>(`/tasks/${id}`);

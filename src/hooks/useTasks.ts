@@ -11,7 +11,7 @@ export const useTasks = () => {
   });
 
   const createMutation = useMutation({
-    mutationFn: (task: Task) => createTask(task),
+    mutationFn: (task: Omit<Task, "id">) => createTask(task),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
@@ -25,7 +25,7 @@ export const useTasks = () => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => deleteTask(id),
+    mutationFn: (id: string) => deleteTask(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
